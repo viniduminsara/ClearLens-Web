@@ -1,5 +1,4 @@
 import axios, { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
-import * as apiUrls from "./apiUrls.ts";
 import {ApiObject, ApiResponse} from "../interfaces/api.ts";
 import $ from 'jquery'
 
