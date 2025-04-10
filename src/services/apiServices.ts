@@ -52,6 +52,14 @@ export const trendingService = async () => {
     return await ApiService.callApi(apiObject);
 }
 
+export const searchProductService = async (searchTerm: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = false
+    apiObject.endpoint = `products/search?searchTerm=${searchTerm}`
+    return await ApiService.callApi(apiObject);
+}
+
 export const addCartItemService = async (productId: string) => {
     const apiObject: ApiObject = {}
     apiObject.method = "PATCH"
