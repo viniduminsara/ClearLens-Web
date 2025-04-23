@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useToast } from "../context/ToastContext.tsx";
-import {saveNewUserAddressService} from "../services/apiServices.ts";
-import {Address} from "../interfaces/user.ts";
+import { useToast } from "../../context/ToastContext.tsx";
+import {saveNewUserAddressService} from "../../services/apiServices.ts";
+import {Address} from "../../interfaces/user.ts";
 
 interface NewAddressModalProps {
     updateAddressHandler: (address: Address[]) => void;

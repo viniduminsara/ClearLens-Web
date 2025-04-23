@@ -5,26 +5,38 @@ import {productsService} from "../services/apiServices.ts";
 import {FaAnglesLeft, FaAnglesRight} from "react-icons/fa6";
 import {Product} from "../interfaces/user.ts";
 import {PaginatedProductResponse} from "../interfaces/api.ts";
+import {IoFilter} from "react-icons/io5";
+import {useApp} from "../context/AppContext.tsx";
 
 const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const {showToast} = useToast();
+    const {filters} = useApp();
 
     const getProducts = async () => {
-        const res = await productsService(currentPage);
-        if (res.success && (res.body as PaginatedProductResponse).docs && (res.body as PaginatedProductResponse).totalPages){
+
+        const obj = {
+            sort: filters.sort || 'ASC',
+            gender: filters.gender || 'ALL',
+            categories: filters.categories || [],
+            minPrice: filters.minPrice || 0,
+            maxPrice: filters.maxPrice || 10000
+        }
+
+        const res = await productsService(currentPage, obj);
+        if (res.success) {
             setProducts((res.body as PaginatedProductResponse).docs);
             setTotalPages((res.body as PaginatedProductResponse).totalPages);
         } else {
-            showToast({ type: "error", message: res.message})
+            showToast({ type: "error", message: res.message });
         }
-    }
+    };
 
     useEffect(() => {
         getProducts();
-    }, [currentPage, showToast]);
+    }, [currentPage, filters]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -40,10 +52,15 @@ const Products = () => {
                 className='rounded-2xl h-full min-h-[10rem] object-cover'
             />
             <section>
-                <h2 className='text-3xl mt-8'>Glasses for you!</h2>
+                <div className='flex justify-between items-end'>
+                    <h2 className='text-3xl mt-8'>Glasses for you!</h2>
+                    <label htmlFor="my-drawer" className="btn btn-primary drawer-button">
+                        <IoFilter />Filters
+                    </label>
+                </div>
                 <div className='flex flex-wrap justify-center my-8'>
                     {products.map((product, index) => (
-                        <ProductCard key={index} data={product}/>
+                        <ProductCard key={index} data={product} />
                     ))}
                 </div>
                 <div className='flex justify-center items-center mb-8'>
@@ -52,22 +69,15 @@ const Products = () => {
                                 disabled={currentPage === 1}>
                             <FaAnglesLeft />
                         </button>
-                        {/*<span className='join-item btn '>{currentPage} of {totalPages}</span>*/}
-                        {(() => {
-                            const buttons = [];
-                            for (let i = 1; i <= totalPages; i++) {
-                                buttons.push(
-                                    <button
-                                        key={i}
-                                        onClick={() => handlePageChange(i)}
-                                        className={`join-item btn ${currentPage === i ? 'btn-primary' : ''}`}
-                                    >
-                                        {i}
-                                    </button>
-                                );
-                            }
-                            return buttons;
-                        })()}
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(i => (
+                            <button
+                                key={i}
+                                onClick={() => handlePageChange(i)}
+                                className={`join-item btn ${currentPage === i ? 'btn-primary' : ''}`}
+                            >
+                                {i}
+                            </button>
+                        ))}
                         <button className='join-item btn' onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === totalPages}>
                             <FaAnglesRight />

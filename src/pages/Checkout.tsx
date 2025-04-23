@@ -9,7 +9,7 @@ import {Address, UserObject} from "../interfaces/user.ts";
 import { useToast } from "../context/ToastContext.tsx";
 import {ApiResponse, OrderWithHash} from "../interfaces/api.ts";
 import { MdShoppingCart } from "react-icons/md";
-import NewAddressModal from "../components/NewAddressModal.tsx";
+import NewAddressModal from "../components/modals/NewAddressModal.tsx";
 import {useNavigate} from "react-router-dom";
 
 const Checkout = () => {

@@ -3,7 +3,7 @@ import {Address, Order, Product, UserObject} from "./user.ts";
 export interface ApiObject {
     endpoint?: string;
     method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-    body?: Record<string, unknown> | SignInObject | SignUpObject | Address | Order;
+    body?: Record<string, unknown> | SignInObject | SignUpObject | Address | Order | FilterObject;
     authentication?: boolean;
     urlEncoded?: boolean;
     multipart?: boolean;
@@ -43,4 +43,12 @@ export interface SignInObject {
 export interface OrderWithHash {
     order: Order;
     hash: string;
+}
+
+export interface FilterObject {
+    sort: string;
+    gender: string;
+    categories: string[];
+    minPrice: number;
+    maxPrice: number;
 }

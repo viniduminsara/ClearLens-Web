@@ -9,6 +9,7 @@ import {
 } from "../services/apiServices.ts";
 import {UserObject} from "../interfaces/user.ts";
 import {CartItem} from "../interfaces/cart.ts";
+import {FilterObject} from "../interfaces/api.ts";
 
 interface AppContextType {
     user: UserObject | null;
@@ -24,6 +25,14 @@ interface AppContextType {
     deleteWishlistItem: (productId: string) => void;
     updateUser: (userData : UserObject) => void;
     updateQtyOfCart: (productId: string, newQty: number) => void;
+    filters: FilterObject,
+    setFilters: React.Dispatch<React.SetStateAction<{
+        sort: string;
+        gender: string;
+        categories: string[];
+        minPrice: number;
+        maxPrice: number;
+    }>>;
 }
 
 const defaultContext: AppContextType = {
@@ -40,6 +49,14 @@ const defaultContext: AppContextType = {
     deleteWishlistItem: () => {},
     updateUser: () => {},
     updateQtyOfCart: () => {},
+    filters: {
+        sort: "ASC",
+        gender: "All",
+        categories: [] as string[],
+        minPrice: 0,
+        maxPrice: 10000
+    },
+    setFilters: (() => {}) as React.Dispatch<React.SetStateAction<FilterObject>>,
 };
 
 const AppContext = createContext(defaultContext);
@@ -55,6 +72,14 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
     const [user, setUser] = useState<UserObject | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const {showToast} = useToast();
+    const [filters, setFilters] = useState({
+        sort: 'ASC',
+        gender: 'All',
+        categories: [] as string[],
+        minPrice: 0,
+        maxPrice: 10000
+    });
+
 
     useEffect(() => {
         setCartItems(user?.cart.map(value => ({ product: value, qty: 1 })) || []);
@@ -173,7 +198,9 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
                 addWishlistItem,
                 deleteWishlistItem,
                 updateUser,
-                updateQtyOfCart
+                updateQtyOfCart,
+                filters,
+                setFilters
             }}
         >
             {children}
