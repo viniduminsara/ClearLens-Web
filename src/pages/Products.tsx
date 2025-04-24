@@ -36,6 +36,7 @@ const Products = () => {
 
     useEffect(() => {
         getProducts();
+        window.scrollTo(0, 0);
     }, [currentPage, filters]);
 
     const handlePageChange = (newPage: number) => {
@@ -58,32 +59,41 @@ const Products = () => {
                         <IoFilter />Filters
                     </label>
                 </div>
-                <div className='flex flex-wrap justify-center my-8'>
-                    {products.map((product, index) => (
-                        <ProductCard key={index} data={product} />
-                    ))}
-                </div>
-                <div className='flex justify-center items-center mb-8'>
-                    <div className="join">
-                        <button className='join-item btn' onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}>
-                            <FaAnglesLeft />
-                        </button>
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(i => (
-                            <button
-                                key={i}
-                                onClick={() => handlePageChange(i)}
-                                className={`join-item btn ${currentPage === i ? 'btn-primary' : ''}`}
-                            >
-                                {i}
-                            </button>
-                        ))}
-                        <button className='join-item btn' onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}>
-                            <FaAnglesRight />
-                        </button>
+                {products.length > 0 ? (
+                    <>
+                        <div className='flex flex-wrap justify-center my-8'>
+                            {products.map((product, index) => (
+                                <ProductCard key={index} data={product}/>
+                            ))}
+                        </div>
+                        <div className='flex justify-center items-center mb-8'>
+                            <div className="join">
+                                <button className='join-item btn' onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}>
+                                    <FaAnglesLeft/>
+                                </button>
+                                {Array.from({length: totalPages}, (_, i) => i + 1).map(i => (
+                                    <button
+                                        key={i}
+                                        onClick={() => handlePageChange(i)}
+                                        className={`join-item btn ${currentPage === i ? 'btn-primary' : ''}`}
+                                    >
+                                        {i}
+                                    </button>
+                                ))}
+                                <button className='join-item btn' onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}>
+                                    <FaAnglesRight/>
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className='flex flex-col justify-center items-center py-20'>
+                        <img src="/search_not_found.png" alt="search not found image"/>
+                        <p className='text-lg text-[#767C9C] text-center'>Products not found</p>
                     </div>
-                </div>
+                )}
             </section>
         </div>
     )
