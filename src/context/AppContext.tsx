@@ -54,7 +54,7 @@ const defaultContext: AppContextType = {
         gender: "All",
         categories: [] as string[],
         minPrice: 0,
-        maxPrice: 10000
+        maxPrice: 0
     },
     setFilters: (() => {}) as React.Dispatch<React.SetStateAction<FilterObject>>,
 };
@@ -77,7 +77,7 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
         gender: 'All',
         categories: [] as string[],
         minPrice: 0,
-        maxPrice: 10000
+        maxPrice: 0
     });
 
 

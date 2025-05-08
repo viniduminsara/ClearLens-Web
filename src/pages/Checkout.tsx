@@ -75,10 +75,10 @@ const Checkout = () => {
             showToast({ type: "error", message: "Please select an address before placing an order!" });
             return;
         }
-        console.log("Order placed with address:", selectedAddress);
 
         const obj = {
             amount: total,
+            address: selectedAddress,
             orderItems: cartItems
         }
 
