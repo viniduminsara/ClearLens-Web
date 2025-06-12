@@ -2,11 +2,11 @@ import ProductCard from "../components/ProductCard.tsx";
 import {useEffect, useState} from "react";
 import {useToast} from "../context/ToastContext.tsx";
 import {productsService} from "../services/apiServices.ts";
-import {FaAnglesLeft, FaAnglesRight} from "react-icons/fa6";
 import {Product} from "../interfaces/user.ts";
 import {PaginatedProductResponse} from "../interfaces/api.ts";
 import {IoFilter} from "react-icons/io5";
 import {useApp} from "../context/AppContext.tsx";
+import PaginateFooter from "../components/PaginateFooter.tsx";
 
 const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -66,27 +66,7 @@ const Products = () => {
                                 <ProductCard key={index} data={product}/>
                             ))}
                         </div>
-                        <div className='flex justify-center items-center mb-8'>
-                            <div className="join">
-                                <button className='join-item btn' onClick={() => handlePageChange(currentPage - 1)}
-                                        disabled={currentPage === 1}>
-                                    <FaAnglesLeft/>
-                                </button>
-                                {Array.from({length: totalPages}, (_, i) => i + 1).map(i => (
-                                    <button
-                                        key={i}
-                                        onClick={() => handlePageChange(i)}
-                                        className={`join-item btn ${currentPage === i ? 'btn-primary' : ''}`}
-                                    >
-                                        {i}
-                                    </button>
-                                ))}
-                                <button className='join-item btn' onClick={() => handlePageChange(currentPage + 1)}
-                                        disabled={currentPage === totalPages}>
-                                    <FaAnglesRight/>
-                                </button>
-                            </div>
-                        </div>
+                        <PaginateFooter handlePageChange={handlePageChange} currentPage={currentPage} totalPages={totalPages}/>
                     </>
                 ) : (
                     <div className='flex flex-col justify-center items-center py-20'>
