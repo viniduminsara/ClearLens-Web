@@ -128,3 +128,19 @@ export const completeOrderPaymentService = async (obj: Order) => {
     return await ApiService.callApi(apiObject);
 }
 
+export const getUserOrderService = async (currentPage: number) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = true
+    apiObject.endpoint = `orders?page=${currentPage}&limit=5`
+    return await ApiService.callApi(apiObject);
+}
+
+export const getUserOrderDetailsService = async (orderId: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = true
+    apiObject.endpoint = `orders/${orderId}`
+    return await ApiService.callApi(apiObject);
+}
+

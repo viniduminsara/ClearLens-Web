@@ -14,6 +14,8 @@ import ProtectedRoutes from "./utils/ProtectedRoutes.tsx";
 import Checkout from "./pages/Checkout.tsx";
 import PaymentSuccess from "./pages/PaymentSuccess.tsx";
 import PaymentFail from "./pages/PaymentFail.tsx";
+import Orders from "./pages/Orders.tsx";
+import OrderDetails from "./pages/OrderDetails.tsx";
 
 function App() {
 
@@ -34,6 +36,8 @@ function App() {
                                 <Route path='/checkout' element={<Checkout/>}/>
                                 <Route path='/paymentSuccess' element={<PaymentSuccess/>}/>
                                 <Route path='/paymentFailure' element={<PaymentFail/>}/>
+                                <Route path='/orders' element={<Orders/>}/>
+                                <Route path='/order/:orderId' element={<OrderDetails/>}/>
                             </Route>
                         </Route>
                     </Routes>

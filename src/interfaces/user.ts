@@ -44,3 +44,21 @@ export interface Order {
     orderItems?: OrderItem[];
     paymentStatus?: string;
 }
+
+export interface PlacedOrder {
+    _id: string;
+    amount: number;
+    orderItems: PlacedOrderItem[];
+    paymentStatus: string;
+    status: string;
+    date: Date;
+}
+
+export interface PlacedOrderItem {
+    _id: string;
+    name: string;
+    image: string;
+    price: number;
+    newPrice: number;
+    qty: number;
+}
