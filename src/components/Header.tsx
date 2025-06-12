@@ -1,16 +1,19 @@
-import {IoCartOutline} from "react-icons/io5";
+import {IoCartOutline, IoPerson} from "react-icons/io5";
 import {BiHeart} from "react-icons/bi";
 import {MdSearch} from "react-icons/md";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {useApp} from "../context/AppContext.tsx";
 import {useEffect, useState} from "react";
 import {searchProductService} from "../services/apiServices.ts";
 import {Product} from "../interfaces/user.ts";
+import {FiLogOut} from "react-icons/fi";
+import LogoutConfirmationModal from "./modals/LogoutConfirmationModal.tsx";
 
 const Header = () => {
-    const {isAuthenticated, user, logout} = useApp();
+    const {isAuthenticated, user} = useApp();
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<Product[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const delayDebounce = setTimeout(async () => {
@@ -26,6 +29,10 @@ const Header = () => {
 
         return () => clearTimeout(delayDebounce);
     }, [searchTerm]);
+
+    const viewOrdersHandler = () => {
+        navigate('/orders');
+    }
 
     return (
         <div className="navbar fixed bg-base-100 z-50 py-4 px-3 md:px-6 lg:px-10 xl:px-12">
@@ -109,16 +116,16 @@ const Header = () => {
                             <ul
                                 tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                <li>
-                                    <a className="justify-between">
-                                        {user?.username}
-                                        <span className="badge">New</span>
-                                    </a>
-                                </li>
-                                <li><a>Settings</a></li>
-                                <li onClick={logout}><a>Logout</a></li>
+                                <li><a className='text-[16px]'><IoPerson /> Profile</a></li>
+                                <li onClick={viewOrdersHandler}><a className='text-[16px]'><IoCartOutline/> Orders</a></li>
+                                <li onClick={() =>
+                                    // @ts-expect-error showModal() comes with daisyUI and not recognized by TypeScript
+                                    document.getElementById("logout_confirmation_modal")?.showModal()
+                                }><a className='text-[16px]'><FiLogOut /> Logout</a></li>
                             </ul>
                         </div>
+
+                        <LogoutConfirmationModal/>
                     </>
                     :
                     <>
