@@ -8,6 +8,7 @@ import {searchProductService} from "../services/apiServices.ts";
 import {Product} from "../interfaces/user.ts";
 import {FiLogOut} from "react-icons/fi";
 import LogoutConfirmationModal from "./modals/LogoutConfirmationModal.tsx";
+import SearchResultItem from "./SearchResultItem.tsx";
 
 const Header = () => {
     const {isAuthenticated, user} = useApp();
@@ -55,31 +56,7 @@ const Header = () => {
                     {results.length > 0 && (
                         <ul className="absolute z-20 mt-1 w-full bg-base-100 rounded shadow-lg max-h-60 overflow-y-auto">
                             {results.map((product) => (
-                                <li key={product._id}>
-                                    <NavLink
-                                        to={`/product/${product.name.toLowerCase().replace(/\s+/g, '-')}-${product._id}`}
-                                        className="block px-4 py-2 hover:bg-base-200 cursor-pointer"
-                                        onClick={() => setSearchTerm('')} // clear search after selection
-                                    >
-                                        <div className='flex justify-between items-center'>
-                                            <div className='flex items-center gap-2'>
-                                                <section
-                                                    className="relative p-2 bg-black/[0.075]  flex items-center justify-center rounded-lg">
-                                                    <img
-                                                        src={product.image}
-                                                        alt="image"
-                                                        className="object-contain w-12 h-12"
-                                                    />
-                                                </section>
-                                                <div>{product.name}</div>
-                                            </div>
-                                            <div className=''>
-                                                <div className='text-lg'>Rs.{product.newPrice}</div>
-                                                <div className='line-through'>Rs.{product.price}</div>
-                                            </div>
-                                        </div>
-                                    </NavLink>
-                                </li>
+                                <SearchResultItem product={product} setSearchTerm={setSearchTerm}/>
                             ))}
                         </ul>
                     )}
