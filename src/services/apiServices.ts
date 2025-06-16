@@ -11,6 +11,24 @@ export const signupService = async (obj: SignUpObject) => {
     return await ApiService.callApi(apiObject);
 }
 
+export const googleSignupService = async (obj: { token: string }) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "POST"
+    apiObject.authentication = false
+    apiObject.endpoint = `users/google-signup`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const googleSigninService = async (obj: { token: string }) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "POST"
+    apiObject.authentication = false
+    apiObject.endpoint = `users/google-signin`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
 export const signinService = async (obj: SignInObject) => {
     const apiObject: ApiObject = {}
     apiObject.method = "POST"

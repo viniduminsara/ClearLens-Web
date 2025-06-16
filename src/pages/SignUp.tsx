@@ -5,9 +5,10 @@ import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useApp} from "../context/AppContext.tsx";
 import {useToast} from "../context/ToastContext.tsx";
-import {signupService} from "../services/apiServices.ts";
+import {googleSignupService, signupService} from "../services/apiServices.ts";
 import {ApiResponse} from "../interfaces/api.ts";
 import {UserObject} from "../interfaces/user.ts";
+import {GoogleLogin} from "@react-oauth/google";
 
 
 const SignUp = () => {
@@ -110,6 +111,24 @@ const SignUp = () => {
                             }
                         </div>
                         <button className='btn btn-primary w-full mb-2' onClick={handleSignUp}>Signup</button>
+                        <GoogleLogin
+                            onSuccess={async credentialResponse => {
+                                const obj = {
+                                    token: credentialResponse.credential || ''
+                                }
+
+                                const res = await googleSignupService(obj);
+                                if (res.success) {
+                                    login(res.body as { user: UserObject; token: string});
+                                    navigate('/');
+                                } else {
+                                    showToast({ type: "error", message: res.message})
+                                }
+                            }}
+                            onError={() => {
+                                showToast({type: 'error', message: 'Google Sign-in failed'});
+                            }}
+                        />
                         <h5>Already have an account? <Link to='/signin' className='link link-primary'>SignIn</Link></h5>
                     </div>
                 </div>
