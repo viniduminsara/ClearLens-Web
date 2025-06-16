@@ -37,7 +37,7 @@ const Orders = () => {
             <h2 className='text-3xl mt-8'>Orders</h2>
 
             {
-                orders.length > 0 && (
+                orders.length > 0 ? (
                     <div className='py-8'>
                         {orders.map((order) => (
                             <Link to={`/order/${order._id}`} key={order._id} className='w-full p-4 rounded-lg shadow-2xl mb-4'>
@@ -79,6 +79,16 @@ const Orders = () => {
                         ))}
                         <PaginateFooter handlePageChange={handlePageChange} currentPage={currentPage} totalPages={totalPages} />
                     </div>
+                ) : (
+                    <>
+                        <div className='flex justify-center items-center min-h-screen'>
+                            <div className='flex flex-col justify-center items-center'>
+                                <img src='/empty-wishlist.png' className='w-64 h-64 mb-4' alt='cart image'/>
+                                <h3 className='text-xl font-bold mb-2'>Nothing to Show!</h3>
+                                <p className='font-thin text-center'>Unlock Your Shopping Desires: Place orders to appear here</p>
+                            </div>
+                        </div>
+                    </>
                 )
             }
         </div>

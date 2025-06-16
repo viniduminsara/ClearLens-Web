@@ -23,7 +23,7 @@ const Wishlist = () => {
                         <div className='flex flex-col justify-center items-center'>
                             <img src='/empty-wishlist.png' className='w-64 h-64 mb-4' alt='cart image'/>
                             <h3 className='text-xl font-bold mb-2'>Nothing to Show!</h3>
-                            <p className='font-thin'>Unlock Your Shopping Desires: Fill Your Empty Wishlist</p>
+                            <p className='font-thin text-center'>Unlock Your Shopping Desires: Fill Your Empty Wishlist</p>
                         </div>
                     </div>
                 </>
