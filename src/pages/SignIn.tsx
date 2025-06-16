@@ -5,9 +5,10 @@ import {FaKey} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
 import {useApp} from "../context/AppContext.tsx";
 import {useToast} from "../context/ToastContext.tsx";
-import {signinService} from "../services/apiServices.ts";
+import {googleSigninService, signinService} from "../services/apiServices.ts";
 import {SignInObject} from "../interfaces/api.ts";
 import {UserObject} from "../interfaces/user.ts";
+import {GoogleLogin} from "@react-oauth/google";
 
 const SignIn = () => {
     const [username, setUsername] = useState('');
@@ -102,7 +103,26 @@ const SignIn = () => {
                                 </div>
                             }
                         </div>
+
                         <button className='btn btn-primary w-full mb-2' onClick={handleSignIn}>Sign in</button>
+                        <GoogleLogin
+                            onSuccess={async credentialResponse => {
+                                const obj = {
+                                    token: credentialResponse.credential || ''
+                                }
+
+                                const res = await googleSigninService(obj);
+                                if (res.success) {
+                                    login(res.body as { user: UserObject; token: string});
+                                    navigate('/');
+                                } else {
+                                    showToast({ type: "error", message: res.message})
+                                }
+                            }}
+                            onError={() => {
+                                showToast({type: 'error', message: 'Google Sign-in failed'});
+                            }}
+                        />
                         <h5>Still haven't account? <Link to='/signup' className='link link-primary'>Signup</Link></h5>
                     </div>
                 </div>
