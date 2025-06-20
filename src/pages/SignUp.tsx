@@ -129,6 +129,12 @@ const SignUp = () => {
                                 showToast({type: 'error', message: 'Google Sign-in failed'});
                             }}
                             text="signup_with"
+                            width="100%"
+                            locale="en"
+                            size="large"
+                            theme="outline"
+                            shape="rectangular"
+                            logo_alignment="left"
                         />
                         <h5>Already have an account? <Link to='/signin' className='link link-primary'>SignIn</Link></h5>
                     </div>
