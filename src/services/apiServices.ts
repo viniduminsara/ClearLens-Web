@@ -128,6 +128,23 @@ export const saveNewUserAddressService = async (obj: Address) => {
     return await ApiService.callApi(apiObject);
 }
 
+export const updateUserAddressService = async (addressId: string, obj: Address) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "PATCH"
+    apiObject.authentication = true
+    apiObject.endpoint = `users/addresses/${addressId}`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const deleteUserAddressService = async (addressId: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "DELETE"
+    apiObject.authentication = true
+    apiObject.endpoint = `users/addresses/${addressId}`
+    return await ApiService.callApi(apiObject);
+}
+
 export const initializeNewOrderService = async (obj: Order) => {
     const apiObject: ApiObject = {}
     apiObject.method = "POST"

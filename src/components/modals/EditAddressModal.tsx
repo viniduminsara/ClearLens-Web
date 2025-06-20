@@ -1,56 +1,55 @@
-import { useState } from "react";
-import { useToast } from "../../context/ToastContext.tsx";
-import {saveNewUserAddressService} from "../../services/apiServices.ts";
+import {useToast} from "../../context/ToastContext.tsx";
+import {useEffect, useState} from "react";
 import {Address} from "../../interfaces/user.ts";
+import {updateUserAddressService} from "../../services/apiServices.ts";
 
-interface NewAddressModalProps {
+interface EditAddressModalProps {
+    currentAddress: Address;
     updateAddressHandler: (address: Address[]) => void;
 }
 
-const NewAddressModal = ({ updateAddressHandler }: NewAddressModalProps) => {
+const EditAddressModal = ({ currentAddress, updateAddressHandler }: EditAddressModalProps) => {
+
     const { showToast } = useToast();
     const [address, setAddress] = useState<Address>({
-        fullName: "",
-        mobileNumber: "",
-        houseNo: "",
-        street: "",
-        city: "",
-        postalCode: "",
+        _id: currentAddress._id,
+        fullName: currentAddress.fullName,
+        mobileNumber: currentAddress.mobileNumber,
+        houseNo: currentAddress.houseNo,
+        street: currentAddress.street,
+        city: currentAddress.city,
+        postalCode: currentAddress.postalCode,
     });
+
+    useEffect(() => {
+        setAddress(currentAddress)
+    }, [currentAddress]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAddress({ ...address, [e.target.name]: e.target.value });
     };
 
     const handleSave = async () => {
-        if (!address.fullName || !address.mobileNumber || !address.houseNo || !address.street || !address.city || !address.postalCode) {
+        if (!address._id || !address.fullName || !address.mobileNumber || !address.houseNo || !address.street || !address.city || !address.postalCode) {
             showToast({ type: "error", message: "All fields are required" });
             return;
         }
 
-        const res = await saveNewUserAddressService(address)
+        const res = await updateUserAddressService(address._id,address)
         if (res.success) {
             updateAddressHandler(res.body as Address[]);
             // @ts-expect-error close() comes with daisyUI and not recognized by TypeScript
-            document.getElementById("new_address_modal")?.close();
-            setAddress({
-                fullName: "",
-                mobileNumber: "",
-                houseNo: "",
-                street: "",
-                city: "",
-                postalCode: "",
-            });
-            showToast({ type: "success", message: "Address saved successfully!" });
+            document.getElementById("edit_address_modal")?.close();
+            showToast({ type: "success", message: "Address updated successfully!" });
         } else {
             showToast({ type: "error", message: res.message})
         }
     };
 
     return (
-        <dialog id="new_address_modal" className="modal">
+        <dialog id="edit_address_modal" className="modal">
             <div className="modal-box">
-                <h3 className="font-bold text-lg">Add New Address</h3>
+                <h3 className="font-bold text-lg">Edit Address</h3>
                 <p className="text-sm text-gray-600 mb-4">Enter your address details below:</p>
 
                 <div className="space-y-3">
@@ -109,17 +108,17 @@ const NewAddressModal = ({ updateAddressHandler }: NewAddressModalProps) => {
                     <button
                         className="btn btn-outline"
                         // @ts-expect-error close() comes with daisyUI and not recognized by TypeScript
-                        onClick={() => document.getElementById("new_address_modal")?.close()
-                    }>
+                        onClick={() => document.getElementById("edit_address_modal")?.close()
+                        }>
                         Cancel
                     </button>
                     <button className="btn btn-primary" onClick={handleSave}>
-                        Save Address
+                        Save Changes
                     </button>
                 </div>
             </div>
         </dialog>
     );
-};
+}
 
-export default NewAddressModal;
+export default EditAddressModal;

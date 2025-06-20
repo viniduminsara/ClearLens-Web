@@ -154,10 +154,10 @@ const Checkout = () => {
                 "amount": parseFloat(String(total)),
                 "currency": "LKR",
                 "hash": hash,
-                "first_name": "Saman",
-                "last_name": "Perera",
-                "email": "samanp@gmail.com",
-                "phone": "0771234567",
+                "first_name": user?.username,
+                "last_name": user?.username,
+                "email": user?.email,
+                "phone": selectedAddress.mobileNumber,
                 "address": "No.1, Galle Road",
                 "city": "Colombo",
                 "country": "Sri Lanka",
@@ -183,8 +183,14 @@ const Checkout = () => {
                     <div className="flex justify-between my-6">
                         <h2 className="text-2xl">Address</h2>
                         <button
-                            // @ts-expect-error showModal() comes with daisyUI and not recognized by TypeScript
-                            onClick={() => document.getElementById("my_modal_5")?.showModal()}
+                            onClick={() => {
+                                if (addresses.length < 3) {
+                                    // @ts-expect-error showModal() comes with daisyUI and not recognized by TypeScript
+                                    document.getElementById("new_address_modal")?.showModal()
+                                } else {
+                                    showToast({ type: "error", message: "You can only save up to 3 addresses."})
+                                }
+                            }}
                             className="btn btn-sm btn-primary"
                         >
                             + Add new Address
