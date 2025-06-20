@@ -17,6 +17,8 @@ import PaymentFail from "./pages/PaymentFail.tsx";
 import Orders from "./pages/Orders.tsx";
 import OrderDetails from "./pages/OrderDetails.tsx";
 import {GoogleOAuthProvider} from "@react-oauth/google";
+import Profile from "./pages/Profile.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
 
@@ -40,7 +42,9 @@ function App() {
                                     <Route path='/paymentFailure' element={<PaymentFail/>}/>
                                     <Route path='/orders' element={<Orders/>}/>
                                     <Route path='/order/:orderId' element={<OrderDetails/>}/>
+                                    <Route path='/profile' element={<Profile/>}/>
                                 </Route>
+                                <Route path="*" element={<NotFound />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>
