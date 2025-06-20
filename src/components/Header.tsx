@@ -1,4 +1,4 @@
-import {IoCartOutline, IoPerson} from "react-icons/io5";
+import {IoCartOutline} from "react-icons/io5";
 import {BiHeart} from "react-icons/bi";
 import {MdSearch} from "react-icons/md";
 import {NavLink, useNavigate} from "react-router-dom";
@@ -93,12 +93,25 @@ const Header = () => {
                             <ul
                                 tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                                <li><a className='text-[16px]'><IoPerson /> Profile</a></li>
-                                <li onClick={viewOrdersHandler}><a className='text-[16px]'><IoCartOutline/> Orders</a></li>
+                                <li onClick={() => navigate('/profile')}>
+                                    <a className='text-[16px] py-4'>
+                                        <div className="avatar placeholder">
+                                            <div className="bg-neutral text-neutral-content w-10 rounded-full">
+                                                <span className="text-lg">{user?.username.toUpperCase().slice(0, 1)}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h3 className='font-bold'>{user.username}</h3>
+                                            <p className='text-xs text-gray-500'>{user.email}</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li onClick={viewOrdersHandler}><a className='text-[16px] py-2'><IoCartOutline/> Orders</a>
+                                </li>
                                 <li onClick={() =>
                                     // @ts-expect-error showModal() comes with daisyUI and not recognized by TypeScript
                                     document.getElementById("logout_confirmation_modal")?.showModal()
-                                }><a className='text-[16px]'><FiLogOut /> Logout</a></li>
+                                }><a className='text-[16px] text-error py-2'><FiLogOut /> Logout</a></li>
                             </ul>
                         </div>
 
