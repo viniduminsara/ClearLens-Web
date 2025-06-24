@@ -111,36 +111,38 @@ const SignUp = () => {
                             }
                         </div>
                         <button className='btn btn-primary w-full mb-2' onClick={handleSignUp}>Signup</button>
-                        <GoogleLogin
-                            onSuccess={async credentialResponse => {
-                                const obj = {
-                                    token: credentialResponse.credential || ''
-                                }
+                        <div className="w-full mb-4">
+                            <GoogleLogin
+                                onSuccess={async credentialResponse => {
+                                    const obj = {
+                                        token: credentialResponse.credential || ''
+                                    }
 
-                                const res = await googleSignupService(obj);
-                                if (res.success) {
-                                    login(res.body as { user: UserObject; token: string});
-                                    navigate('/');
-                                } else {
-                                    showToast({ type: "error", message: res.message})
-                                }
-                            }}
-                            onError={() => {
-                                showToast({type: 'error', message: 'Google Sign-in failed'});
-                            }}
-                            text="signup_with"
-                            width="100%"
-                            locale="en"
-                            size="large"
-                            theme="outline"
-                            shape="rectangular"
-                            logo_alignment="left"
-                        />
+                                    const res = await googleSignupService(obj);
+                                    if (res.success) {
+                                        login(res.body as { user: UserObject; token: string });
+                                        navigate('/');
+                                    } else {
+                                        showToast({type: "error", message: res.message})
+                                    }
+                                }}
+                                onError={() => {
+                                    showToast({type: 'error', message: 'Google Sign-in failed'});
+                                }}
+                                text="signup_with"
+                                width="100%"
+                                locale="en"
+                                size="large"
+                                theme="outline"
+                                shape="rectangular"
+                                logo_alignment="left"
+                            />
+                        </div>
                         <h5>Already have an account? <Link to='/signin' className='link link-primary'>SignIn</Link></h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex-1 hidden md:flex">
+                <div className="flex-1 hidden md:flex">
                 <div
                     className="hero"
                     style={{
