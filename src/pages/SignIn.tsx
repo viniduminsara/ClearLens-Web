@@ -52,9 +52,8 @@ const SignIn = () => {
                         <div className="max-w-md">
                             <h1 className="mb-5 text-5xl font-bold">Welcome Back</h1>
                             <p className="mb-5">
-                                Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
-                                exercitationem
-                                quasi. In deleniti eaque aut repudiandae et a id nisi.
+                                Discover a clearer vision with every visit. Sign in to explore our latest collection
+                                of stylish spectacles and enjoy a personalized shopping experience tailored just for you.
                             </p>
                         </div>
                     </div>
@@ -104,9 +103,9 @@ const SignIn = () => {
                             }
                         </div>
 
-                        <button className='btn btn-primary w-full mb-2' onClick={handleSignIn}>Sign in</button>
-
-                        <div className="w-full mb-4">
+                        <button className='btn btn-primary w-full' onClick={handleSignIn}>Sign in</button>
+                        <div className="divider">or</div>
+                        <div className="w-full flex justify-center items-center mb-4">
                             <GoogleLogin
                                 onSuccess={async credentialResponse => {
                                     const obj = {
@@ -134,9 +133,9 @@ const SignIn = () => {
                             />
                         </div>
                         <h5>Still haven't account? <Link to='/signup' className='link link-primary'>Signup</Link></h5>
-                        </div>
                     </div>
                 </div>
+            </div>
             </div>
     );
 }

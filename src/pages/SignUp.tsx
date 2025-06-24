@@ -110,8 +110,9 @@ const SignUp = () => {
                                 </div>
                             }
                         </div>
-                        <button className='btn btn-primary w-full mb-2' onClick={handleSignUp}>Signup</button>
-                        <div className="w-full mb-4">
+                        <button className='btn btn-primary w-full' onClick={handleSignUp}>Signup</button>
+                        <div className="divider">or</div>
+                        <div className="w-full flex justify-center items-center mb-4">
                             <GoogleLogin
                                 onSuccess={async credentialResponse => {
                                     const obj = {
@@ -139,9 +140,9 @@ const SignUp = () => {
                             />
                         </div>
                         <h5>Already have an account? <Link to='/signin' className='link link-primary'>SignIn</Link></h5>
-                        </div>
                     </div>
                 </div>
+            </div>
                 <div className="flex-1 hidden md:flex">
                 <div
                     className="hero"
@@ -151,11 +152,11 @@ const SignUp = () => {
                     <div className="hero-overlay bg-opacity-60"></div>
                     <div className="hero-content text-neutral-content text-center">
                         <div className="max-w-md">
-                            <h1 className="mb-5 text-5xl font-bold">Hello There</h1>
+                            <h1 className="mb-5 text-5xl font-bold">Join ClearLens</h1>
                             <p className="mb-5">
-                                Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
-                                exercitationem
-                                quasi. In deleniti eaque aut repudiandae et a id nisi.
+                                Create your account and start your journey to sharper style and clearer vision.
+                                Enjoy exclusive deals, fast checkout, and a personalized eyewear experience made
+                                just for you.
                             </p>
                         </div>
                     </div>

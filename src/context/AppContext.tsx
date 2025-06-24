@@ -15,7 +15,6 @@ interface AppContextType {
     user: UserObject | null;
     cartItems: CartItem[];
     isAuthenticated: boolean,
-    isAuthLoading: boolean,
     token: string,
     login: (data :{user: UserObject, token: string}) => void;
     logout: () => void;
@@ -39,7 +38,6 @@ const defaultContext: AppContextType = {
     user: null,
     cartItems: [],
     isAuthenticated: false,
-    isAuthLoading: false,
     token: "",
     login: () => {},
     logout: () => {},
@@ -67,7 +65,6 @@ interface AppProviderProps {
 
 export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isAuthLoading, setIsAuthLoading] = useState(true);  // New loading state
     const [token, setToken] = useState("");
     const [user, setUser] = useState<UserObject | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -88,10 +85,8 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
     const login = async (data :{user: UserObject, token: string}) => {
         setToken(data.token);
         setUser(data.user);
-        setIsAuthLoading(true);
         localStorage.setItem("accessToken", data.token);
         setIsAuthenticated(true);
-        setIsAuthLoading(false);
     }
 
     const logout = () => {
@@ -112,8 +107,6 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
             }
         } catch (err) {
             return;
-        } finally {
-            setIsAuthLoading(false);
         }
     }
 
@@ -189,7 +182,6 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
                 user,
                 cartItems,
                 isAuthenticated,
-                isAuthLoading,
                 token,
                 login,
                 logout,
