@@ -47,7 +47,7 @@ const Home = () => {
                 </div>
             </section>
             <section className='mb-8'>
-                <h2 className='text-2xl font-bold'>Trending Products</h2>
+                <h2 className='text-2xl font-bold'>Trending</h2>
                 <div className='flex flex-wrap'>
                     {products.map((product, index) => (
                         <TrendingCard key={index} data={product} />
@@ -55,11 +55,11 @@ const Home = () => {
                 </div>
             </section>
             <section>
-                <h2 className='text-2xl font-bold'>Categories</h2>
+                <h2 className='text-2xl font-bold'>Our Products</h2>
                 <div className='flex-row lg:flex justify-around items-center my-8'>
-                    <CategoryCard title='Prescription' image='/prescription_glasses.jpg'/>
+                    <CategoryCard title='Vision' image='/prescription_glasses.jpg'/>
                     <CategoryCard title='Sunglasses' image='/sunglasses.jpg'/>
-                    <CategoryCard title='Sport' image='/sport.jpg'/>
+                    <CategoryCard title='Sports' image='/sport.jpg'/>
                 </div>
             </section>
         </div>

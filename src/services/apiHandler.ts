@@ -44,9 +44,9 @@ export const callApi = async (apiObject: ApiObject): Promise<ApiResponse> => {
         $(".loadingEffect").css("display", "none");
 
         if (axios.isAxiosError(error) && error.response) {
-            result = {success: false, statusCode: error.response.data?.statusCode,  message: error.response.data?.message};
+            result = {body: [], success: false, statusCode: error.response.data?.statusCode,  message: error.response.data?.message};
         } else {
-            result = {success: false, message: "Your connection was interrupted" };
+            result = {body: [], success: false, message: "Your connection was interrupted" };
         }
 
         // if (axios.isAxiosError(error) && error.response) {

@@ -3,9 +3,10 @@ import {FaRegCheckCircle} from "react-icons/fa";
 import {MdErrorOutline} from "react-icons/md";
 import {IoWarningOutline} from "react-icons/io5";
 import {IoMdInformationCircleOutline} from "react-icons/io";
+import {IToast} from "../interfaces/toast.ts";
 
 interface ToastProps {
-    data: Toast;
+    data: IToast;
 }
 
 const Toast = ({ data }: ToastProps) => {

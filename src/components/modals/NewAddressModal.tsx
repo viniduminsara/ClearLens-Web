@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useToast } from "../context/ToastContext.tsx";
-import {saveNewUserAddressService} from "../services/apiServices.ts";
-import {Address} from "../interfaces/user.ts";
+import { useToast } from "../../context/ToastContext.tsx";
+import {saveNewUserAddressService} from "../../services/apiServices.ts";
+import {Address} from "../../interfaces/user.ts";
 
 interface NewAddressModalProps {
     updateAddressHandler: (address: Address[]) => void;
@@ -32,7 +32,15 @@ const NewAddressModal = ({ updateAddressHandler }: NewAddressModalProps) => {
         if (res.success) {
             updateAddressHandler(res.body as Address[]);
             // @ts-expect-error close() comes with daisyUI and not recognized by TypeScript
-            document.getElementById("my_modal_5")?.close();
+            document.getElementById("new_address_modal")?.close();
+            setAddress({
+                fullName: "",
+                mobileNumber: "",
+                houseNo: "",
+                street: "",
+                city: "",
+                postalCode: "",
+            });
             showToast({ type: "success", message: "Address saved successfully!" });
         } else {
             showToast({ type: "error", message: res.message})
@@ -40,7 +48,7 @@ const NewAddressModal = ({ updateAddressHandler }: NewAddressModalProps) => {
     };
 
     return (
-        <dialog id="my_modal_5" className="modal">
+        <dialog id="new_address_modal" className="modal">
             <div className="modal-box">
                 <h3 className="font-bold text-lg">Add New Address</h3>
                 <p className="text-sm text-gray-600 mb-4">Enter your address details below:</p>
@@ -101,7 +109,7 @@ const NewAddressModal = ({ updateAddressHandler }: NewAddressModalProps) => {
                     <button
                         className="btn btn-outline"
                         // @ts-expect-error close() comes with daisyUI and not recognized by TypeScript
-                        onClick={() => document.getElementById("my_modal_5")?.close()
+                        onClick={() => document.getElementById("new_address_modal")?.close()
                     }>
                         Cancel
                     </button>

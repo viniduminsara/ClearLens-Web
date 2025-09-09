@@ -1,5 +1,5 @@
 import * as ApiService from "./apiHandler.ts"
-import {ApiObject, SignInObject, SignUpObject} from "../interfaces/api.ts";
+import {ApiObject, FilterObject, SignInObject, SignUpObject} from "../interfaces/api.ts";
 import {Address, Order} from "../interfaces/user.ts";
 
 export const signupService = async (obj: SignUpObject) => {
@@ -7,6 +7,24 @@ export const signupService = async (obj: SignUpObject) => {
     apiObject.method = "POST"
     apiObject.authentication = false
     apiObject.endpoint = `users/signup`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const googleSignupService = async (obj: { token: string }) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "POST"
+    apiObject.authentication = false
+    apiObject.endpoint = `users/google-signup`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const googleSigninService = async (obj: { token: string }) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "POST"
+    apiObject.authentication = false
+    apiObject.endpoint = `users/google-signin`
     apiObject.body = obj
     return await ApiService.callApi(apiObject);
 }
@@ -28,11 +46,12 @@ export const userDetailsService = async () => {
     return await ApiService.callApi(apiObject);
 }
 
-export const productsService = async (currentPage: number) => {
+export const productsService = async (currentPage: number, obj: FilterObject) => {
     const apiObject: ApiObject = {}
-    apiObject.method = "GET"
+    apiObject.method = "POST"
     apiObject.authentication = false
     apiObject.endpoint = `products?page=${currentPage}`
+    apiObject.body = obj
     return await ApiService.callApi(apiObject);
 }
 
@@ -49,6 +68,14 @@ export const trendingService = async () => {
     apiObject.method = "GET"
     apiObject.authentication = false
     apiObject.endpoint = `products/trending`
+    return await ApiService.callApi(apiObject);
+}
+
+export const searchProductService = async (searchTerm: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = false
+    apiObject.endpoint = `products/search?searchTerm=${searchTerm}`
     return await ApiService.callApi(apiObject);
 }
 
@@ -101,6 +128,23 @@ export const saveNewUserAddressService = async (obj: Address) => {
     return await ApiService.callApi(apiObject);
 }
 
+export const updateUserAddressService = async (addressId: string, obj: Address) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "PATCH"
+    apiObject.authentication = true
+    apiObject.endpoint = `users/addresses/${addressId}`
+    apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const deleteUserAddressService = async (addressId: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "DELETE"
+    apiObject.authentication = true
+    apiObject.endpoint = `users/addresses/${addressId}`
+    return await ApiService.callApi(apiObject);
+}
+
 export const initializeNewOrderService = async (obj: Order) => {
     const apiObject: ApiObject = {}
     apiObject.method = "POST"
@@ -116,6 +160,22 @@ export const completeOrderPaymentService = async (obj: Order) => {
     apiObject.authentication = true
     apiObject.endpoint = `orders/complete`
     apiObject.body = obj
+    return await ApiService.callApi(apiObject);
+}
+
+export const getUserOrderService = async (currentPage: number) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = true
+    apiObject.endpoint = `orders?page=${currentPage}&limit=5`
+    return await ApiService.callApi(apiObject);
+}
+
+export const getUserOrderDetailsService = async (orderId: string) => {
+    const apiObject: ApiObject = {}
+    apiObject.method = "GET"
+    apiObject.authentication = true
+    apiObject.endpoint = `orders/${orderId}`
     return await ApiService.callApi(apiObject);
 }
 
