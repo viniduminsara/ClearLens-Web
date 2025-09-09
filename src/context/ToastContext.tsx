@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import {IToast} from "../interfaces/toast.ts";
 
 interface ToastContextType {
-    showToast: (toast: Toast) => void;
-    toasts: Toast[];
+    showToast: (toast: IToast) => void;
+    toasts: IToast[];
 }
 
 const defaultContext: ToastContextType = {
@@ -17,9 +18,9 @@ interface ToastProviderProps {
 }
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
-    const [toasts, setToasts] = useState<Toast[]>([]);
+    const [toasts, setToasts] = useState<IToast[]>([]);
 
-    const showToast = (toast: Toast) => {
+    const showToast = (toast: IToast) => {
         setToasts(prevState => [...prevState, toast]);
     };
 

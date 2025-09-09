@@ -9,7 +9,7 @@ const Cart = () => {
         <div className='px-6 pt-20 md:px-24'>
             {cartItems.length > 0 ?
                 <>
-                    <h2 className='text-2xl font-bold my-6'>Cart ({cartItems.length})</h2>
+                    <h2 className='text-3xl my-6'>Cart ({cartItems.length})</h2>
                     <div className='md:grid md:grid-cols-3 gap-5 my-8'>
                         <div className='md:col-span-2'>
                             {cartItems.map((item, index) => (

@@ -9,12 +9,12 @@ import {
 } from "../services/apiServices.ts";
 import {UserObject} from "../interfaces/user.ts";
 import {CartItem} from "../interfaces/cart.ts";
+import {FilterObject} from "../interfaces/api.ts";
 
 interface AppContextType {
     user: UserObject | null;
     cartItems: CartItem[];
     isAuthenticated: boolean,
-    isAuthLoading: boolean,
     token: string,
     login: (data :{user: UserObject, token: string}) => void;
     logout: () => void;
@@ -24,13 +24,20 @@ interface AppContextType {
     deleteWishlistItem: (productId: string) => void;
     updateUser: (userData : UserObject) => void;
     updateQtyOfCart: (productId: string, newQty: number) => void;
+    filters: FilterObject,
+    setFilters: React.Dispatch<React.SetStateAction<{
+        sort: string;
+        gender: string;
+        categories: string[];
+        minPrice: number;
+        maxPrice: number;
+    }>>;
 }
 
 const defaultContext: AppContextType = {
     user: null,
     cartItems: [],
     isAuthenticated: false,
-    isAuthLoading: false,
     token: "",
     login: () => {},
     logout: () => {},
@@ -40,6 +47,14 @@ const defaultContext: AppContextType = {
     deleteWishlistItem: () => {},
     updateUser: () => {},
     updateQtyOfCart: () => {},
+    filters: {
+        sort: "ASC",
+        gender: "All",
+        categories: [] as string[],
+        minPrice: 0,
+        maxPrice: 0
+    },
+    setFilters: (() => {}) as React.Dispatch<React.SetStateAction<FilterObject>>,
 };
 
 const AppContext = createContext(defaultContext);
@@ -50,11 +65,18 @@ interface AppProviderProps {
 
 export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isAuthLoading, setIsAuthLoading] = useState(true);  // New loading state
     const [token, setToken] = useState("");
     const [user, setUser] = useState<UserObject | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const {showToast} = useToast();
+    const [filters, setFilters] = useState({
+        sort: 'ASC',
+        gender: 'All',
+        categories: [] as string[],
+        minPrice: 0,
+        maxPrice: 0
+    });
+
 
     useEffect(() => {
         setCartItems(user?.cart.map(value => ({ product: value, qty: 1 })) || []);
@@ -63,10 +85,8 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
     const login = async (data :{user: UserObject, token: string}) => {
         setToken(data.token);
         setUser(data.user);
-        setIsAuthLoading(true);
         localStorage.setItem("accessToken", data.token);
         setIsAuthenticated(true);
-        setIsAuthLoading(false);
     }
 
     const logout = () => {
@@ -87,8 +107,6 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
             }
         } catch (err) {
             return;
-        } finally {
-            setIsAuthLoading(false);
         }
     }
 
@@ -164,7 +182,6 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
                 user,
                 cartItems,
                 isAuthenticated,
-                isAuthLoading,
                 token,
                 login,
                 logout,
@@ -173,7 +190,9 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
                 addWishlistItem,
                 deleteWishlistItem,
                 updateUser,
-                updateQtyOfCart
+                updateQtyOfCart,
+                filters,
+                setFilters
             }}
         >
             {children}

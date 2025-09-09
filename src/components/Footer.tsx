@@ -1,15 +1,19 @@
-import {FaFacebookSquare, FaTwitter} from "react-icons/fa";
-import {AiFillInstagram} from "react-icons/ai";
-
 const Footer = () => {
     return (
-        <footer className="footer bg-base-300 text-base-content p-10">
+        <footer className="footer bg-base-200 text-base-content px-6 py-12 md:px-24">
+            <aside>
+                <img src='/logo.png' alt='logo' className='w-32 h-16 lg:w-36 lg:h-16'/>
+                <p>
+                    ClearLens Private Ltd.
+                    <br/>
+                    Providing reliable specs since 1992
+                </p>
+            </aside>
             <nav>
-                <h6 className="footer-title">Services</h6>
-                <a className="link link-hover">Branding</a>
-                <a className="link link-hover">Design</a>
-                <a className="link link-hover">Marketing</a>
-                <a className="link link-hover">Advertisement</a>
+                <h6 className="footer-title">Categories</h6>
+                <a className="link link-hover">Vision</a>
+                <a className="link link-hover">Sunglasses</a>
+                <a className="link link-hover">Sports</a>
             </nav>
             <nav>
                 <h6 className="footer-title">Company</h6>
@@ -19,18 +23,10 @@ const Footer = () => {
                 <a className="link link-hover">Press kit</a>
             </nav>
             <nav>
-                <h6 className="footer-title">Social</h6>
-                <div className="grid grid-flow-col gap-4">
-                    <a>
-                        <FaTwitter size={24}/>
-                    </a>
-                    <a>
-                        <FaFacebookSquare size={24}/>
-                    </a>
-                    <a>
-                        <AiFillInstagram size={24}/>
-                    </a>
-                </div>
+                <h6 className="footer-title">Legal</h6>
+                <a className="link link-hover">Terms of use</a>
+                <a className="link link-hover">Privacy policy</a>
+                <a className="link link-hover">Cookie policy</a>
             </nav>
         </footer>
     )
