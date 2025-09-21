@@ -1,7 +1,13 @@
-import {useApp} from "../../context/AppContext.tsx";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../store.ts";
+import {logout} from "../../features/auth/authSlice.ts";
 
 const LogoutConfirmationModal = () => {
-    const {logout} = useApp();
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleLogout = () => {
+        dispatch(logout());
+    }
 
     return (
         <dialog id="logout_confirmation_modal" className="modal modal-bottom sm:modal-middle">
@@ -17,7 +23,7 @@ const LogoutConfirmationModal = () => {
                             }>
                             Cancel
                         </button>
-                        <button className="btn btn-primary" onClick={logout}>
+                        <button className="btn btn-primary" onClick={handleLogout}>
                             Yes, Logout
                         </button>
                     </div>

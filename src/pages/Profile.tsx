@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Address } from "../interfaces/user.ts";
 import {deleteUserAddressService, getUserAddressesService} from "../services/apiServices.ts";
 import { useToast } from "../context/ToastContext.tsx";
-import { useApp } from "../context/AppContext.tsx";
 import NewAddressModal from "../components/modals/NewAddressModal.tsx";
 import EditAddressModal from "../components/modals/EditAddressModal.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store.ts";
 
 const Profile = () => {
     const [userAddresses, setUserAddresses] = useState<Address[] | null>(null);
@@ -17,7 +18,7 @@ const Profile = () => {
         city: "",
         postalCode: "",
     });
-    const { user } = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
     const { showToast } = useToast();
 
     const getUserAddresses = async () => {

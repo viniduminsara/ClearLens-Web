@@ -1,9 +1,10 @@
 import CartSummaryCard from "../components/cart/CartSummaryCard.tsx";
 import CartItemCard from "../components/cart/CartItemCard.tsx";
-import {useApp} from "../context/AppContext.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store.ts";
 
 const Cart = () => {
-    const {cartItems} = useApp();
+    const cartItems = useSelector((state: RootState)=> state.cart.cartItems);
 
     return (
         <div className='px-6 pt-20 md:px-24'>

@@ -1,4 +1,3 @@
-import { useApp } from "../context/AppContext.tsx";
 import { useEffect, useState } from "react";
 import {
     completeOrderPaymentService,
@@ -11,9 +10,14 @@ import {ApiResponse, OrderWithHash} from "../interfaces/api.ts";
 import { MdShoppingCart } from "react-icons/md";
 import NewAddressModal from "../components/modals/NewAddressModal.tsx";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store.ts";
+import {updateUser} from "../features/auth/authSlice.ts";
 
 const Checkout = () => {
-    const { cartItems, updateUser, user } = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
+    const cartItems = useSelector((state: RootState)=> state.cart.cartItems);
+    const dispatch = useDispatch<AppDispatch>();
     const { showToast } = useToast();
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [total, setTotal] = useState(0);
@@ -103,7 +107,7 @@ const Checkout = () => {
 
                 const res = await completeOrderPaymentService(obj)
                 if (res.success) {
-                    updateUser(res.body as UserObject)
+                    dispatch(updateUser(res.body as UserObject));
                     navigate('/paymentSuccess');
                 } else {
                     navigate('/paymentFailure');

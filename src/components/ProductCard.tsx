@@ -2,16 +2,23 @@ import {GiRoundStar} from "react-icons/gi";
 import {BiHeart} from "react-icons/bi";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {useApp} from "../context/AppContext.tsx";
 import {FaHeart} from "react-icons/fa";
 import {Product} from "../interfaces/user.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store.ts";
+import {addCartItem, deleteCartItem} from "../features/cart/cartThunks.ts";
+import {useToast} from "../context/ToastContext.tsx";
+import {addWishlistItem, deleteWishlistItem} from "../features/auth/authThunks.ts";
 
 interface ProductCardProps {
     data: Product
 }
 
 const ProductCard = ({ data }: ProductCardProps) => {
-    const {user, isAuthenticated, addCartItem, deleteCartItem, addWishlistItem, deleteWishlistItem} = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
+    const isAuthenticated = useSelector((state: RootState)=> state.auth.isAuthenticated);
+    const dispatch = useDispatch<AppDispatch>();
+    const {showToast} = useToast();
     const [isCartItem, setIsCartItem] = useState(false);
     const [isWishlistItem, setIsWishlistItem] = useState(false);
 
@@ -21,6 +28,42 @@ const ProductCard = ({ data }: ProductCardProps) => {
             setIsWishlistItem(user?.wishlist.some((item) => item._id === data._id))
         }
     }, [data._id, user]);
+
+    const handleAddCartItem = async () => {
+        try {
+            await dispatch(addCartItem(data._id)).unwrap();
+            showToast({ type: "success", message: "Added to cart successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
+
+    const handleDeleteCartItem = async () => {
+        try {
+            await dispatch(deleteCartItem(data._id)).unwrap();
+            showToast({ type: "success", message: "Removed from cart successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
+
+    const handleAddWishlistItem = async () => {
+        try {
+            await dispatch(addWishlistItem(data._id)).unwrap();
+            showToast({ type: "success", message: "Added to wishlist successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
+
+    const handleDeleteWishlistItem = async () => {
+        try {
+            await dispatch(deleteWishlistItem(data._id)).unwrap();
+            showToast({ type: "success", message: "Removed from wishlist successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
 
     return (
         <div className="card card-compact bg-base-100 w-96 shadow-xl mb-6 lg:m-4 transition-transform hover:scale-[1.02] hover:shadow-lg">
@@ -55,24 +98,24 @@ const ProductCard = ({ data }: ProductCardProps) => {
                 {isAuthenticated ?
                     <div className="card-actions justify-between items-center mt-4">
                         {!isCartItem ?
-                            <div className="btn btn-primary btn-outline" onClick={() => addCartItem(data._id)}>
+                            <div className="btn btn-primary btn-outline" onClick={handleAddCartItem}>
                                 Add to Cart
                             </div>
                             :
-                            <div className="btn btn-primary btn-outline" onClick={() => deleteCartItem(data._id)}>
+                            <div className="btn btn-primary btn-outline" onClick={handleDeleteCartItem}>
                                 Remove from Cart
                             </div>
                         }
                         {!isWishlistItem ?
                             <div className='btn btn-ghost btn-circle cursor-pointer'
-                                 onClick={() => addWishlistItem(data._id)}>
+                                 onClick={handleAddWishlistItem}>
                                 <BiHeart size={28} className='text-primary'/>
                             </div>
 
                             :
 
                             <div className='btn btn-ghost btn-circle cursor-pointer'
-                                 onClick={() => deleteWishlistItem(data._id)}>
+                                 onClick={handleDeleteWishlistItem}>
                                 <FaHeart size={28} className='text-primary'/>
                             </div>
                         }

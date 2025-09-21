@@ -1,8 +1,11 @@
-import { useApp } from "../../context/AppContext.tsx";
 import { useEffect, useState } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store.ts";
+import {setFilters} from "../../features/filter/filterSlice.ts";
 
 const FilterModal = () => {
-    const { filters, setFilters } = useApp();
+    const filters = useSelector((state: RootState) => state.filter);
+    const dispatch = useDispatch<AppDispatch>();
 
     // Local states for debouncing
     const [min, setMin] = useState(filters.minPrice);
@@ -11,32 +14,27 @@ const FilterModal = () => {
     // Debounce effect
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setFilters(prev => ({
-                ...prev,
-                minPrice: min,
-                maxPrice: max,
-            }));
+            dispatch(setFilters({minPrice: min, maxPrice: max}));
         }, 500);
 
         return () => clearTimeout(timeout);
     }, [min, max]);
 
     const handleSortChange = (newSort: 'ASC' | 'DESC') => {
-        setFilters(prev => ({ ...prev, sort: newSort }));
+        dispatch(setFilters({ sort: newSort }));
     };
 
     const handleGenderChange = (newGender: string) => {
-        setFilters(prev => ({ ...prev, gender: newGender }));
+        dispatch(setFilters({ gender: newGender }));
     };
 
     const handleCategoryToggle = (category: string) => {
-        setFilters(prev => {
-            const exists = prev.categories.includes(category);
-            const newCategories = exists
-                ? prev.categories.filter(cat => cat !== category)
-                : [...prev.categories, category];
-            return { ...prev, categories: newCategories };
-        });
+        const exists = filters.categories.includes(category);
+        const newCategories = exists
+            ? filters.categories.filter((cat) => cat !== category)
+            : [...filters.categories, category];
+
+        dispatch(setFilters({ categories: newCategories }));
     };
 
     return (

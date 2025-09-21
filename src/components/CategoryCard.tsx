@@ -1,5 +1,7 @@
 import {useNavigate} from "react-router-dom";
-import {useApp} from "../context/AppContext.tsx";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store.ts";
+import {setFilters} from "../features/filter/filterSlice.ts";
 
 interface CategoryCardProps {
     title: string;
@@ -8,12 +10,10 @@ interface CategoryCardProps {
 
 const CategoryCard = ({ title, image } : CategoryCardProps) => {
     const navigate = useNavigate();
-    const {setFilters} = useApp();
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleCategoryToggle = (category: string) => {
-        setFilters(prev => {
-            return { ...prev, categories: [category] };
-        });
+        dispatch(setFilters({categories: [category]}));
     };
 
     return (

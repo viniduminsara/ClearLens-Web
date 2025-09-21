@@ -1,10 +1,15 @@
 import {AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 import {BiHeart} from "react-icons/bi";
 import {FaHeart, FaRegTrashAlt} from "react-icons/fa";
-import {useApp} from "../../context/AppContext.tsx";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {Product} from "../../interfaces/user.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../store.ts";
+import {useToast} from "../../context/ToastContext.tsx";
+import {updateQty} from "../../features/cart/cartSlice.ts";
+import {deleteCartItem} from "../../features/cart/cartThunks.ts";
+import {addWishlistItem, deleteWishlistItem} from "../../features/auth/authThunks.ts";
 
 interface CartItemCardProps{
     product: Product;
@@ -12,7 +17,9 @@ interface CartItemCardProps{
 }
 
 const CartItemCard = ({ product, qty }: CartItemCardProps) => {
-    const {user, addWishlistItem, deleteCartItem, deleteWishlistItem, updateQtyOfCart} = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
+    const dispatch = useDispatch<AppDispatch>();
+    const {showToast} = useToast();
 
     const [isWishlistItem, setIsWishlistItem] = useState(false);
 
@@ -21,6 +28,33 @@ const CartItemCard = ({ product, qty }: CartItemCardProps) => {
             setIsWishlistItem(user?.wishlist.some((item) => item._id === product._id))
         }
     }, [product._id, user]);
+
+    const handleDeleteCartItem = async () => {
+        try {
+            await dispatch(deleteCartItem(product._id)).unwrap();
+            showToast({ type: "success", message: "Removed from cart successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
+
+    const handleAddWishlistItem = async () => {
+        try {
+            await dispatch(addWishlistItem(product._id)).unwrap();
+            showToast({ type: "success", message: "Added to wishlist successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
+
+    const handleDeleteWishlistItem = async () => {
+        try {
+            await dispatch(deleteWishlistItem(product._id)).unwrap();
+            showToast({ type: "success", message: "Removed from wishlist successfully" });
+        } catch (err) {
+            showToast({ type: "error", message: String(err) });
+        }
+    }
 
     return (
         <div className='w-full p-6 shadow-xl rounded-3xl mb-4'>
@@ -37,7 +71,7 @@ const CartItemCard = ({ product, qty }: CartItemCardProps) => {
                             <div className='flex my-3'>
                                 <button onClick={() => {
                                     if (qty > 1) {
-                                        updateQtyOfCart(product._id, qty-1);
+                                        dispatch(updateQty({productId: product._id, qty: qty-1}));
                                     }
                                 }}
                                     className='btn btn-neutral btn-xs disabled:cursor-not-allowed'>
@@ -49,7 +83,7 @@ const CartItemCard = ({ product, qty }: CartItemCardProps) => {
                                 </span>
                                 <button onClick={() => {
                                     if (qty >= 1) {
-                                        updateQtyOfCart(product._id, qty+1);
+                                        dispatch(updateQty({productId: product._id, qty: qty+1}));
                                     }
                                 }}
                                     className='btn btn-neutral btn-xs rounded-md text-xs disabled:cursor-not-allowed'>
@@ -63,20 +97,20 @@ const CartItemCard = ({ product, qty }: CartItemCardProps) => {
                     <div className='flex sm:gap-3 mt-2 self-end'>
                         {!isWishlistItem ?
                             <button className='btn btn-ghost btn-circle cursor-pointer disabled:cursor-not-allowed'
-                                    onClick={() => addWishlistItem(product._id)}
+                                    onClick={handleAddWishlistItem}
                             >
                                 <BiHeart size={24} className='text-primary'/>
                             </button>
                             :
                             <button className='btn btn-ghost btn-circle cursor-pointer disabled:cursor-not-allowed'
-                                    onClick={() => deleteWishlistItem(product._id)}
+                                    onClick={handleDeleteWishlistItem}
                             >
                                 <FaHeart size={24} className='text-primary'/>
                             </button>
                         }
                         <button
                             className='btn btn-ghost btn-circle cursor-pointer disabled:cursor-not-allowed'
-                            onClick={() => deleteCartItem(product._id)}
+                            onClick={handleDeleteCartItem}
                         >
                             <FaRegTrashAlt size={20} className='text-primary'/>
                         </button>

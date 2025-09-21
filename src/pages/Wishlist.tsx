@@ -1,8 +1,9 @@
 import ProductCard from "../components/ProductCard.tsx";
-import {useApp} from "../context/AppContext.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store.ts";
 
 const Wishlist = () => {
-    const {user} = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
 
     return (
         <section className='px-6 pt-20 md:px-24'>

@@ -21,7 +21,7 @@ const Home = () => {
             }
         }
         getTrendingProducts();
-    }, [showToast]);
+    }, []);
 
     return (
         <div className='px-6 pt-12 md:px-24'>

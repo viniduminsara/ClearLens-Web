@@ -5,15 +5,16 @@ import {productsService} from "../services/apiServices.ts";
 import {Product} from "../interfaces/user.ts";
 import {PaginatedProductResponse} from "../interfaces/api.ts";
 import {IoFilter} from "react-icons/io5";
-import {useApp} from "../context/AppContext.tsx";
 import PaginateFooter from "../components/PaginateFooter.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store.ts";
 
 const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const {showToast} = useToast();
-    const {filters} = useApp();
+    const filters = useSelector((state: RootState) => state.filter);
 
     const getProducts = async () => {
 
