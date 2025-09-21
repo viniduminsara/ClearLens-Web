@@ -2,16 +2,18 @@ import {IoCartOutline} from "react-icons/io5";
 import {BiHeart} from "react-icons/bi";
 import {MdSearch} from "react-icons/md";
 import {NavLink, useNavigate} from "react-router-dom";
-import {useApp} from "../context/AppContext.tsx";
 import {useEffect, useState} from "react";
 import {searchProductService} from "../services/apiServices.ts";
 import {Product} from "../interfaces/user.ts";
 import {FiLogOut} from "react-icons/fi";
 import LogoutConfirmationModal from "./modals/LogoutConfirmationModal.tsx";
 import SearchResultItem from "./SearchResultItem.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store.ts";
 
 const Header = () => {
-    const {isAuthenticated, user} = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
+    const isAuthenticated = useSelector((state: RootState)=> state.auth.isAuthenticated);
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState<Product[]>([]);
     const navigate = useNavigate();

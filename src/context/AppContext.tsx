@@ -114,7 +114,7 @@ export const AppContextProvider: React.FC<AppProviderProps> = ({children}) => {
         const savedToken = localStorage.getItem("accessToken");
         if (savedToken) {
             setToken(savedToken);
-            getUserDetails();
+            // getUserDetails();
         }
     }, []);
 

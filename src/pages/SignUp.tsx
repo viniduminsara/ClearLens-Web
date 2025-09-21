@@ -3,12 +3,14 @@ import {IoIosMail, IoMdPerson} from "react-icons/io";
 import {FaKey} from "react-icons/fa";
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {useApp} from "../context/AppContext.tsx";
 import {useToast} from "../context/ToastContext.tsx";
 import {googleSignupService, signupService} from "../services/apiServices.ts";
 import {ApiResponse} from "../interfaces/api.ts";
 import {UserObject} from "../interfaces/user.ts";
 import {GoogleLogin} from "@react-oauth/google";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store.ts";
+import {login} from "../features/auth/authSlice.ts";
 
 
 const SignUp = () => {
@@ -20,7 +22,7 @@ const SignUp = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    const {login} = useApp();
+    const dispatch = useDispatch<AppDispatch>();
     const {showToast} = useToast();
     const navigate = useNavigate();
 
@@ -33,7 +35,7 @@ const SignUp = () => {
             };
             const res: ApiResponse = await signupService(obj);
             if (res.success) {
-                login(res.body as { user: UserObject; token: string});
+                dispatch(login(res.body as { user: UserObject; token: string}));
                 navigate('/');
             } else {
                 showToast({ type: "error", message: res.message})
@@ -121,7 +123,7 @@ const SignUp = () => {
 
                                     const res = await googleSignupService(obj);
                                     if (res.success) {
-                                        login(res.body as { user: UserObject; token: string });
+                                        dispatch(login(res.body as { user: UserObject; token: string }));
                                         navigate('/');
                                     } else {
                                         showToast({type: "error", message: res.message})

@@ -2,15 +2,20 @@ import {FaHeart, FaShoppingCart} from "react-icons/fa";
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useToast} from "../context/ToastContext.tsx";
-import {useApp} from "../context/AppContext.tsx";
 import {productDetailsService} from "../services/apiServices.ts";
 import {MdOutlineRemoveShoppingCart} from "react-icons/md";
 import {IoMdHeartDislike} from "react-icons/io";
 import {Product} from "../interfaces/user.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store.ts";
+import {addCartItem, deleteCartItem} from "../features/cart/cartThunks.ts";
+import {addWishlistItem, deleteWishlistItem} from "../features/auth/authThunks.ts";
 
 const ProductDetails = () => {
     const { productId } = useParams();
-    const {user, isAuthenticated, addCartItem, addWishlistItem, deleteCartItem, deleteWishlistItem} = useApp();
+    const user = useSelector((state: RootState)=> state.auth.user);
+    const isAuthenticated = useSelector((state: RootState)=> state.auth.isAuthenticated);
+    const dispatch = useDispatch<AppDispatch>();
     const {showToast} = useToast();
     const [productDetails, setProductDetails] = useState<Product | null>(null);
     const [isCartItem, setIsCartItem] = useState(false);
@@ -41,6 +46,50 @@ const ProductDetails = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const handleAddCartItem = async () => {
+        if (productId) {
+            try {
+                await dispatch(addCartItem(productId.split('-').pop() as string)).unwrap();
+                showToast({ type: "success", message: "Added to cart successfully" });
+            } catch (err) {
+                showToast({ type: "error", message: String(err) });
+            }
+        }
+    }
+
+    const handleDeleteCartItem = async () => {
+        if (productId) {
+            try {
+                await dispatch(deleteCartItem(productId.split('-').pop() as string)).unwrap();
+                showToast({ type: "success", message: "Removed from cart successfully" });
+            } catch (err) {
+                showToast({ type: "error", message: String(err) });
+            }
+        }
+    }
+
+    const handleAddWishlistItem = async () => {
+        if (productId) {
+            try {
+                await dispatch(addWishlistItem(productId.split('-').pop() as string)).unwrap();
+                showToast({ type: "success", message: "Added to wishlist successfully" });
+            } catch (err) {
+                showToast({ type: "error", message: String(err) });
+            }
+        }
+    }
+
+    const handleDeleteWishlistItem = async () => {
+        if (productId) {
+            try {
+                await dispatch(deleteWishlistItem(productId.split('-').pop() as string)).unwrap();
+                showToast({ type: "success", message: "Removed from wishlist successfully" });
+            } catch (err) {
+                showToast({ type: "error", message: String(err) });
+            }
+        }
+    }
 
     return (
         <div className='px-6 pt-12 md:px-24'>
@@ -107,43 +156,27 @@ const ProductDetails = () => {
                         {isAuthenticated ?
                             <div className="w-full flex gap-4 items-center flex-wrap">
                                 {!isCartItem ?
-                                    <div className='btn btn-primary' onClick={() => {
-                                        if (productId) {
-                                            addCartItem(productId.split('-').pop() as string);
-                                        }
-                                    }}>
+                                    <div className='btn btn-primary' onClick={handleAddCartItem}>
                                         <FaShoppingCart/>
                                         Add to Cart
                                     </div>
 
                                     :
 
-                                    <div className='btn btn-primary' onClick={() => {
-                                        if (productId) {
-                                            deleteCartItem(productId.split('-').pop() as string);
-                                        }
-                                    }}>
+                                    <div className='btn btn-primary' onClick={handleDeleteCartItem}>
                                         <MdOutlineRemoveShoppingCart />
                                         Remove from Cart
                                     </div>
                                 }
                                 {!isWishlistItem ?
-                                    <div className='btn btn-primary' onClick={() => {
-                                        if (productId) {
-                                            addWishlistItem(productId.split('-').pop() as string);
-                                        }
-                                    }}>
+                                    <div className='btn btn-primary' onClick={handleAddWishlistItem}>
                                         <FaHeart/>
                                         Add to Wishlist
                                     </div>
 
                                     :
 
-                                    <div className='btn btn-primary' onClick={() => {
-                                        if (productId) {
-                                            deleteWishlistItem(productId.split('-').pop() as string);
-                                        }
-                                    }}>
+                                    <div className='btn btn-primary' onClick={handleDeleteWishlistItem}>
                                         <IoMdHeartDislike />
                                         Remove from Wishlist
                                     </div>

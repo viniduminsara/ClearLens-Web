@@ -5,7 +5,6 @@ import Products from "./pages/Products.tsx";
 import ProductDetails from "./pages/ProductDetails.tsx";
 import Wishlist from "./pages/Wishlist.tsx";
 import Cart from "./pages/Cart.tsx";
-import {AppContextProvider} from "./context/AppContext.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import {ToastProvider} from "./context/ToastContext.tsx";
@@ -25,7 +24,6 @@ function App() {
     return (
         <GoogleOAuthProvider clientId={`${import.meta.env.VITE_GOOGLE_0AUTH_CLIENT_ID}`}>
             <ToastProvider>
-                <AppContextProvider>
                     <BrowserRouter>
                         <Routes>
                             <Route element={<Layout/>}>
@@ -49,7 +47,6 @@ function App() {
                         </Routes>
                     </BrowserRouter>
                     <ToastContainer/>
-                </AppContextProvider>
             </ToastProvider>
         </GoogleOAuthProvider>
     )

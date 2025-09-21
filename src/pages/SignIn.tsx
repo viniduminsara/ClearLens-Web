@@ -3,21 +3,22 @@ import {IoMdPerson} from "react-icons/io";
 import {useState} from "react";
 import {FaKey} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
-import {useApp} from "../context/AppContext.tsx";
 import {useToast} from "../context/ToastContext.tsx";
 import {googleSigninService, signinService} from "../services/apiServices.ts";
 import {SignInObject} from "../interfaces/api.ts";
 import {UserObject} from "../interfaces/user.ts";
 import {GoogleLogin} from "@react-oauth/google";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store.ts";
+import {login} from "../features/auth/authSlice.ts";
 
 const SignIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    const {login} = useApp();
+    const dispatch = useDispatch<AppDispatch>();
     const {showToast} = useToast();
     const navigate = useNavigate();
 
@@ -29,7 +30,8 @@ const SignIn = () => {
                 };
                 const res = await signinService(obj);
                 if (res.success) {
-                    login(res.body as { user: UserObject; token: string});
+                    // login(res.body as { user: UserObject; token: string});
+                    dispatch(login(res.body as { user: UserObject; token: string }));
                     navigate('/');
                 } else {
                     showToast({ type: "error", message: res.message})
@@ -114,7 +116,7 @@ const SignIn = () => {
 
                                     const res = await googleSigninService(obj);
                                     if (res.success) {
-                                        login(res.body as { user: UserObject; token: string });
+                                        dispatch(login(res.body as { user: UserObject; token: string }));
                                         navigate('/');
                                     } else {
                                         showToast({type: "error", message: res.message})
