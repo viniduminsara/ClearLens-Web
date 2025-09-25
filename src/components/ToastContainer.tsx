@@ -5,7 +5,7 @@ const ToastContainer = () => {
     const {toasts} = useToast();
 
     return (
-        <div id="toast" className=" toast toast-end">
+        <div id="toast" className="toast toast-top toast-end mt-24 z-50">
             {toasts.map((value, index) => (
                 <Toast key={index} data={value}/>
             ))}

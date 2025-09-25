@@ -22,6 +22,11 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
 
     const showToast = (toast: IToast) => {
         setToasts(prevState => [...prevState, toast]);
+
+        //remove toast after 3 seconds
+        setTimeout(() => {
+            setToasts(prev => prev.slice(1));
+        }, 3000);
     };
 
     return (

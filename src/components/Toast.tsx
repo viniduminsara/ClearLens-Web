@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import {FaRegCheckCircle} from "react-icons/fa";
 import {MdErrorOutline} from "react-icons/md";
 import {IoWarningOutline} from "react-icons/io5";
@@ -10,13 +9,6 @@ interface ToastProps {
 }
 
 const Toast = ({ data }: ToastProps) => {
-    const [isShowing, setIsShowing] = useState(true);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsShowing(false);
-        }, 3000)
-    }, []);
 
     const getIcon = () => {
         if (data.type === 'success'){
@@ -31,9 +23,11 @@ const Toast = ({ data }: ToastProps) => {
     }
 
     return (
-        <div role="alert" className={`alert bg-neutral text-${data.type} ${isShowing ? '' : 'hidden'} z-50`}>
-            {getIcon()}
-            <span>{data.message}</span>
+        <div role="alert" className={`alert bg-neutral text-${data.type} justify-start`}>
+            <div className='flex items-center gap-2'>
+                {getIcon()}
+                <span>{data.message}</span>
+            </div>
         </div>
     )
 }
