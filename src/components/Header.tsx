@@ -10,6 +10,7 @@ import LogoutConfirmationModal from "./modals/LogoutConfirmationModal.tsx";
 import SearchResultItem from "./SearchResultItem.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../store.ts";
+import {currentAuthState} from "../features/auth/authTypes.ts";
 
 const Header = () => {
     const user = useSelector((state: RootState)=> state.auth.user);
@@ -66,7 +67,7 @@ const Header = () => {
             </div>
             <div className="navbar-end gap-x-2">
                 <NavLink to='/products' className='btn btn-sm btn-primary hidden lg:flex'>Explore</NavLink>
-                {isAuthenticated && user ?
+                {isAuthenticated == currentAuthState.SUCCESS && user ?
                     <>
                         <NavLink to='/wishlist' className="btn btn-ghost btn-circle">
                             <div className="indicator">

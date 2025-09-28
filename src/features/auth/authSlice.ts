@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AuthState} from "./authTypes.ts";
+import {AuthState, currentAuthState} from "./authTypes.ts";
 import {UserObject} from "../../interfaces/user.ts";
 import {addWishlistItem, deleteWishlistItem, fetchUserDetails} from "./authThunks.ts";
 import {addCartItem, deleteCartItem} from "../cart/cartThunks.ts";
@@ -8,7 +8,7 @@ import {addCartItem, deleteCartItem} from "../cart/cartThunks.ts";
 const initialState: AuthState = {
     user: null,
     token: "",
-    isAuthenticated: false,
+    isAuthenticated: currentAuthState.PENDING,
 };
 
 const authSlice = createSlice({
@@ -18,26 +18,31 @@ const authSlice = createSlice({
         login: (state, action: PayloadAction<{ user: UserObject; token: string }>) => {
             state.user = action.payload.user;
             state.token = action.payload.token;
-            state.isAuthenticated = true;
+            state.isAuthenticated = currentAuthState.SUCCESS;
             localStorage.setItem("accessToken", action.payload.token);
         },
         logout: (state) => {
             state.user = null;
             state.token = "";
-            state.isAuthenticated = false;
+            state.isAuthenticated = currentAuthState.FAILED;
             localStorage.removeItem("accessToken");
         },
         updateUser: (state, action: PayloadAction<UserObject>) => {
             state.user = action.payload;
-            state.isAuthenticated = true;
+            state.isAuthenticated = currentAuthState.SUCCESS;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUserDetails.fulfilled, (state, action) => {
                 state.user = action.payload;
-                state.isAuthenticated = true;
+                state.isAuthenticated = currentAuthState.SUCCESS;
                 state.token = localStorage.getItem("accessToken") || "";
+            })
+            .addCase(fetchUserDetails.rejected, (state) => {
+                state.isAuthenticated = currentAuthState.FAILED;
+                state.token = "";
+                localStorage.removeItem("accessToken");
             })
             .addCase(addWishlistItem.fulfilled, (state, action) => {
                 state.user = action.payload;
