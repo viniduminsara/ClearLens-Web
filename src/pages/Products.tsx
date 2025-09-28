@@ -62,7 +62,7 @@ const Products = () => {
                 </div>
                 {products.length > 0 ? (
                     <>
-                        <div className='flex flex-wrap justify-center my-8'>
+                        <div className='flex flex-wrap my-8'>
                             {products.map((product, index) => (
                                 <ProductCard key={index} data={product}/>
                             ))}

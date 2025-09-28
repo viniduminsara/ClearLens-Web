@@ -32,7 +32,7 @@ const Layout = () => {
                 <input id="my-drawer" type="checkbox" className="drawer-toggle"/>
                 <div className="drawer-content">
 
-                    <main>
+                    <main className='min-h-[76vh]'>
                         <Outlet/>
                     </main>
 
